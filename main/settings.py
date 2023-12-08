@@ -25,8 +25,11 @@ SECRET_KEY = 'django-insecure-8z-xiqf3u&k#sr5c9060k%ks97dg!*$&)2!hskg=j&w8nsoy90
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://web-production-4d22.up.railway.app/remove_bg/']
+ALLOWED_HOSTS = ['web-production-4d22.up.railway.app/remove_bg/']
 
+CSRF_TRUSTED_ORIGINS = ["https://web-production-4d22.up.railway.app/"]
+CSRF_ALLOWED_ORIGINS = ["https://web-production-4d22.up.railway.app/"]
+CORS_ORIGINS_WHITELIST = ["https://web-production-4d22.up.railway.app/"]
 
 # Application definition
 
@@ -69,7 +72,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'main.wsgi.application'
-CSRF_TRUSTED_ORIGINS = ['https://web-production-4d22.up.railway.app/']
+  
 
 
 
