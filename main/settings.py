@@ -69,6 +69,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'main.wsgi.application'
+CSRF_TRUSTED_ORIGINS = ['*']
+
 
 
 # Database
