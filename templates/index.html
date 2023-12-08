@@ -1,0 +1,165 @@
+<!-- template.html -->
+
+<html>
+
+<head>
+
+    <title>Remove Background</title>
+    <link rel="shortcut icon" type="image/png"
+        href="https://cdn3.iconfinder.com/data/icons/flat-circle-content/512/flat-style-circle-cut-2-512.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+
+<body>
+    {% include 'nav.html' %}
+    <div class="container mt-5">
+        <div class="row me-2 ms-1">
+            <div class="col-lg"></div>
+            <div id="img-col" style="max-height: 600px !important; border-radius: 20px;" class="col-lg-5 p-3">
+                <div id="imagePreviewContainer">
+                    <!-- <img id="imagePreview" src="" alt="Image Preview"> -->
+                </div>
+
+
+            </div>
+            <div class="col-lg">
+                <!-- <div id="result"></div> -->
+
+            </div>
+        </div>
+        <div class="row mb-4 mt-4">
+            <div class="col-lg"></div>
+            <div class="col-lg-5 px-2">
+                <form id="formB">
+                    <label
+                        style="font-weight: 600; background-color: #3EECAC;background-image: linear-gradient(19deg, #3EECAC 0%, #EE74E1 100%);"
+                        for="imageInput" class="px-3 me-2 mt-2 border none btn btn-info rounded-pill">
+                        Upload Image
+                    </label>
+
+
+                    <input class="d-none" type="file" id="imageInput" accept="image/*">
+                    <button style="font-weight: 600;" class="px-3 mt-2 btn btn-info rounded-pill d-none"
+                        id="removeBgBtn">Remove
+                        Background</button>
+                </form>
+                <a class="btn btn-primary rounded-pill px-0" style="display: none; font-weight:600; width: 150px;"
+                    id="download-btn" download="">download </a>
+            </div>
+            <div class="col-lg"></div>
+        </div>
+    </div>
+
+    <script>
+
+        // Function to get the CSRF token from the cookie
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        $(document).ready(function () {
+
+            // $('#imageInput').change(function () {
+            //     var fileInput = this.files[0];
+            //     showImagePreview(fileInput);
+            //     $("#removeBgBtn").removeClass("d-none")
+            //     $("#img-col").addClass("border")
+            // });
+            // Define a variable to store the current selected file
+            var currentFile;
+
+            $('#imageInput').change(function () {
+                // Check if any file is selected
+                if (this.files.length > 0) {
+                    // Update the currentFile variable
+                    currentFile = this.files[0];
+                    console.log("currentfile", currentFile)
+                    showImagePreview(currentFile);
+                    $("#removeBgBtn").removeClass("d-none");
+                    $("#img-col").addClass("border");
+                } else {
+                    // If no file is selected, use the previous file
+                    if (currentFile) {
+                        showImagePreview(currentFile);
+                        $("#removeBgBtn").removeClass("d-none");
+                        $("#img-col").addClass("border");
+                    } else {
+                        // Handle the case where no file is selected and no previous file is available
+                        console.error('No file selected');
+                    }
+                }
+            });
+
+
+            $('#removeBgBtn').click(function () {
+                event.preventDefault()
+                var formData = new FormData();
+                // var fileInput = $('#imageInput')[0].files[0];
+                var fileInput = currentFile
+                formData.append('image', fileInput);
+
+                var csrftoken = getCookie('csrftoken');
+                $.ajax({
+                    url: '/remove_bg/',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-CSRFToken': csrftoken
+                    },
+                    success: function (data) {
+                        console.log("data", data)
+                        if (data.status === 'success') {
+                            $('#imagePreviewContainer').html('<a href="' + data.processed_image + '" download><img style="width: auto; max-width: 100%; height: 100%;   display: block;  margin: 0 auto;" src="' + data.processed_image + '"></a>');
+                            $("#download-btn").css({
+                                display: "block"
+                            });
+                            $("#download-btn").attr("href", url = data.processed_image);
+                            document.getElementById("formB").reset()
+                            // $('#imagePreviewContainer').html("")
+
+                        } else {
+                            $('#result').text('Error: ' + data.message);
+                        }
+                    },
+                    error: function () {
+                        $('#result').text('An error occurred');
+                    }
+                });
+            });
+
+        });
+
+
+
+        function showImagePreview(file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                // Create the img element dynamically
+                var imagePreview = $('<img style="width: auto; max-width: 100%; height: 100%;   display: block;  margin: 0 auto;" id="imagePreview" src="" alt="Image Preview">');
+                $('#imagePreviewContainer').empty().append(imagePreview);
+                imagePreview.attr('src', e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    </script>
+
+</body>
+
+</html>
