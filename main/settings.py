@@ -26,14 +26,14 @@ SECRET_KEY = 'django-insecure-8z-xiqf3u&k#sr5c9060k%ks97dg!*$&)2!hskg=j&w8nsoy90
 DEBUG = True
 
 # Update ALLOWED_HOSTS with the actual domain of your production server
-ALLOWED_HOSTS = ['web-production-96e3.up.railway.app', '127.0.0.1']
+ALLOWED_HOSTS = ['web-production-96e3.up.railway.app', '127.0.0.1', 'django-background-remover.onrender.com']
 
 # Update CSRF settings
-CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:8000/", 'https://web-production-96e3.up.railway.app']
-CSRF_ALLOWED_ORIGINS = ["http://127.0.0.1:8000/", 'https://web-production-96e3.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:8000/", 'https://web-production-96e3.up.railway.app','https://django-background-remover.onrender.com']
+CSRF_ALLOWED_ORIGINS = ["http://127.0.0.1:8000/", 'https://web-production-96e3.up.railway.app', 'https://django-background-remover.onrender.com']
 
 # Update CORS settings
-CORS_ORIGINS_WHITELIST = ["http://127.0.0.1:8000/", 'https://web-production-96e3.up.railway.app']
+CORS_ORIGINS_WHITELIST = ["http://127.0.0.1:8000/", 'https://web-production-96e3.up.railway.app', 'https://django-background-remover.onrender.com']
 
 
 # Application definition
