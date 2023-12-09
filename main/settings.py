@@ -25,12 +25,16 @@ SECRET_KEY = 'django-insecure-8z-xiqf3u&k#sr5c9060k%ks97dg!*$&)2!hskg=j&w8nsoy90
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+# Update ALLOWED_HOSTS with the actual domain of your production server
+ALLOWED_HOSTS = ['web-production-96e3.up.railway.app', '127.0.0.1']
 
+# Update CSRF settings
+CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:8000/", 'https://web-production-96e3.up.railway.app']
+CSRF_ALLOWED_ORIGINS = ["http://127.0.0.1:8000/", 'https://web-production-96e3.up.railway.app']
 
-CSRF_TRUSTED_ORIGINS = ["*"]
-CSRF_ALLOWED_ORIGINS = ["*"]
-CORS_ORIGINS_WHITELIST = ["*"]
+# Update CORS settings
+CORS_ORIGINS_WHITELIST = ["http://127.0.0.1:8000/", 'https://web-production-96e3.up.railway.app']
+
 
 # Application definition
 
